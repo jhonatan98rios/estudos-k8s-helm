@@ -1,0 +1,11 @@
+replicaCount: 1
+
+image:
+  repository: localhost:5000/custom-nginx
+  pullPolicy: IfNotPresent
+  tag: latest
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 80

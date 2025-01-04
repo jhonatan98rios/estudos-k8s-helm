@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "websockets-helm.fullname" . }}
+  labels:
+    {{- include "websockets-helm.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "websockets-helm.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "websockets-helm.name" . }}
+    spec:
+      containers:
+        - name: websockets-helm
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "websockets-helm.fullname" . }}
+  labels:
+    {{- include "websockets-helm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+  selector:
+    app: {{ include "websockets-helm.name" . }}

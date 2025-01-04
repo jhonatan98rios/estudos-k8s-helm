@@ -1,0 +1,11 @@
+replicaCount: 1
+
+image:
+  repository: localhost:5000/websockets-helm
+  pullPolicy: IfNotPresent
+  tag: latest
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 5000

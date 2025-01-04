@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "flask-helm.fullname" . }}
+  labels:
+    {{- include "flask-helm.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "flask-helm.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "flask-helm.name" . }}
+    spec:
+      containers:
+        - name: flask-helm
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "flask-helm.fullname" . }}
+  labels:
+    {{- include "flask-helm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+  selector:
+    app: {{ include "flask-helm.name" . }}
