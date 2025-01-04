@@ -1,0 +1,1 @@
+# This repo is a study collection of small projects related to docker, k8s and helm
