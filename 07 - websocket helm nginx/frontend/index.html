@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Simple WebSocket Chat</h1>
+    <div id="messages"></div>
+    <input id="message_input" type="text" placeholder="Type your message" />
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        var socket = io.connect('http://127.0.0.1:56397');
+
+        // Quando uma nova mensagem é recebida, ela será exibida
+        socket.on('message', function(msg) {
+            var messageElement = document.createElement('p');
+            messageElement.textContent = msg;
+            document.getElementById('messages').appendChild(messageElement);
+        });
+
+        // Função para enviar a mensagem para o servidor
+        function sendMessage() {
+            var message = document.getElementById('message_input').value;
+            socket.send(message);
+            document.getElementById('message_input').value = ''; // Limpar o input após envio
+        }
+    </script>
+</body>
+</html>

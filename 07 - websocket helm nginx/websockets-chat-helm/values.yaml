@@ -1,0 +1,36 @@
+replicaCount: 1
+
+backend:
+  image:
+    repository: 127.0.0.1:5000/websockets-chat-backend
+    tag: latest
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    nodePort: 32000
+  containerPort: 3000
+
+frontend:
+  image:
+    repository: 127.0.0.1:5000/websockets-chat-frontend
+    tag: latest
+  service:
+    type: LoadBalancer
+    port: 80
+    targetPort: 80
+  containerPort: 3000
+
+ingress:
+  enabled: true
+  hosts:
+    - host: backend.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: websockets-chat-helm-backend
+                port:
+                  number: 3000
